@@ -10,12 +10,18 @@ def post_list(request):
     return render(request, 'blog/post/list.html', context=dict)
 
 #  Create a second view to display a single post.
-def post_detail(request, id):
-    post = get_list_or_404(Post, id=id, status= Post.Status.PUBLISHED)
-    try:
-        post = Post.published.get(id=id)
-    except Post.DoesNotExist:
-        raise Http404('No Post found.')
+def post_detail(request, year, month, day, post):
+    post = get_list_or_404(Post,
+                           status= Post.Status.PUBLISHED,
+                           slug=post,
+                           publish__year=year,
+                           publish__month=month,
+                           publish__day=day
+                           )
+    # try:
+    #     post = Post.published.get(id=id)
+    # except Post.DoesNotExist:
+    #     raise Http404('No Post found.')
     
     dict = {'post': post}
     return render(request, 'blog/post/detail.html', context=dict)
